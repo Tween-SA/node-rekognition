@@ -233,4 +233,44 @@ module.exports = class Rekognition {
         
         return await this.doCall('searchFacesByImage', params)
     }
+
+    /**
+     * Starts a face search in a mp4 stored video. 
+     * 
+     * @param {string} collectionId 
+     * @param {Object} s3Video 
+     * @param {number} threshold
+     * @param {number} snsTopic
+     */
+    async startFaceSearch(collectionId, s3Video, snsTopic, threshold = 90) {
+        var params = {
+            CollectionId: collectionId,
+            Video: {
+                S3Object: {
+                    Bucket: this.bucket, 
+                    Name: s3Video.Key
+                }
+            },
+            FaceMatchThreshold: threshold,
+            NotificationChannel: {
+                RoleArn: snsTopic.role, 
+                SNSTopicArn: snsTopic.topic 
+              }
+        }
+        
+        return await this.doCall('startFaceSearch', params)
+    }
+
+    /**
+     * Get the search result of an specific JobId from the startFaceSearch process
+     * 
+     * @param {string} jobId 
+     */
+    async getFaceSearch(jobId) {
+        var params = {
+            JobId: jobId
+          }
+        
+        return await this.doCall('getFaceSearch', params)
+    }
 }
