@@ -69,6 +69,27 @@ module.exports = class Rekognition {
     }
 
     /**
+     * Detects text within an image 
+     * 
+     * @param {Object} s3Image 
+     * @param {string} threshold
+    */
+   async detectText(s3Image, threshold = 50) {
+    const params = {
+        Image: {
+            S3Object: {
+                Bucket: this.bucket,
+                Name: s3Image.Key
+            }
+        },
+        MaxLabels: 4096,
+        MinConfidence: threshold
+    }
+
+    return await this.doCall('detectText', params)
+}
+
+    /**
      * Detects faces within an image
      * 
      * @param {Object} s3Image
