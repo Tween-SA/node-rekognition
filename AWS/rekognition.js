@@ -81,9 +81,7 @@ module.exports = class Rekognition {
                 Bucket: this.bucket,
                 Name: s3Image.Key
             }
-        },
-        MaxLabels: 4096,
-        MinConfidence: threshold
+        }
     }
 
     return await this.doCall('detectText', params)
